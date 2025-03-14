@@ -1,22 +1,30 @@
 class PlacesController < ApplicationController
-  before_action :require_login, only: [:new, :create]
+  before_action :require_login
+
+  class PlacesController < ApplicationController
+    before_action :require_login
+  
+    def index
+      @places = @current_user ? Place.where(user_id: @current_user.id) : []  # ✅ Prevents nil errors
+    end
+  end
+  
 
   def index
     if @current_user
-      @places = Place.where("user_id = ?", @current_user["id"])  # Basic SQL-style query
+      @places = Place.where(user_id: @current_user.id)
     else
-      redirect_to "/login"
+      @places = []  # ✅ Prevents nil errors
     end
   end
 
-  def new
-  end
+  def show
+    @place = Place.find_by(id: params["id"], user_id: @current_user&.id)
 
-  def create
-    @place = Place.new
-    @place["name"] = params["name"]
-    @place["user_id"] = @current_user["id"]
-    @place.save
-    redirect_to "/places"
+    if @place.nil?
+      redirect_to "/places", alert: "You do not have permission to view this place."
+    else
+      @entries = Entry.where(place_id: @place.id)
+    end
   end
 end

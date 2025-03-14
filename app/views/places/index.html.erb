@@ -1,15 +1,25 @@
-<h1>Your Places</h1>
+<h1 class="mb-4">Your Places</h1>
 
-<ul>
-  <% if @places.any? %>
+<% if @places.present? %>  <!-- ✅ Using .present? prevents nil errors -->
+  <div class="row g-3">
     <% for place in @places %>
-      <li><a href="/places/<%= place["id"] %>"><%= place["name"] %></a></li>
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="/places/<%= place["id"] %>" class="text-decoration-none">
+                <%= place["name"] %>
+              </a>
+            </h5>
+          </div>
+        </div>
+      </div>
     <% end %>
-  <% else %>
-    <p>You haven't added any places yet.</p>
-  <% end %>
-</ul>
+  </div>
+<% else %>
+  <p class="text-muted">You haven't added any places yet.</p>
+<% end %>
 
-<p>
-  <a href="/places/new">New place</a>
+<p class="mt-4">
+  <a href="/places/new" class="btn btn-primary">New Place</a>
 </p>
