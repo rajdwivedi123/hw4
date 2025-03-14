@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
   <head>
-    <title>Tacostagram Final</title>
+    <title>Travel Journal</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -13,11 +13,22 @@
     <div>
       <%= flash["notice"] %>
     </div>
+
     <div>
       <a href="/">Home</a>
-      <a href="/logout">Logout</a>
-      <a href="/login">Login</a>
-      <a href="/users/new">Signup</a>
+
+      <% if session[:user_id] %>
+        <form action="/logout" method="post" style="display:inline;">
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit" style="border:none; background:none; color:blue; cursor:pointer;">
+            Logout
+          </button>
+        </form>
+        Logged in as <%= User.find(session[:user_id]).username %>
+      <% else %>
+        <a href="/login">Login</a>
+        <a href="/signup">Signup</a>
+      <% end %>
     </div>
 
     <%= yield %>

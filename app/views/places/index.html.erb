@@ -1,8 +1,12 @@
-<h1>Places</h1>
+<h1>Your Places</h1>
 
 <ul>
-  <% for place in @places %>
-    <li><a href="/places/<%= place["id"] %>"><%= place["name"] %></a></li>
+  <% if @places.any? %>
+    <% for place in @places %>
+      <li><a href="/places/<%= place["id"] %>"><%= place["name"] %></a></li>
+    <% end %>
+  <% else %>
+    <p>You haven't added any places yet.</p>
   <% end %>
 </ul>
 

@@ -1,12 +1,12 @@
 class PlacesController < ApplicationController
+  before_action :require_login, only: [:new, :create]
 
   def index
-    @places = Place.all
-  end
-
-  def show
-    @place = Place.find_by({ "id" => params["id"] })
-    @entries = Entry.where({ "place_id" => @place["id"] })
+    if @current_user
+      @places = Place.where("user_id = ?", @current_user["id"])  # Basic SQL-style query
+    else
+      redirect_to "/login"
+    end
   end
 
   def new
@@ -15,8 +15,8 @@ class PlacesController < ApplicationController
   def create
     @place = Place.new
     @place["name"] = params["name"]
+    @place["user_id"] = @current_user["id"]
     @place.save
     redirect_to "/places"
   end
-
 end
