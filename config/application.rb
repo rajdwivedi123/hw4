@@ -36,6 +36,8 @@ module StarterApp
     
     # Do not validate belongs_to in all environments
     config.active_record.belongs_to_required_by_default = false
+
+    config.require_master_key = false
     
     # Disable strong parameters in all environments
     config.action_controller.permit_all_parameters = true
