@@ -1,20 +1,11 @@
 class PlacesController < ApplicationController
   before_action :require_login
 
-  class PlacesController < ApplicationController
-    before_action :require_login
-  
-    def index
-      @places = @current_user ? Place.where(user_id: @current_user.id) : []  # ✅ Prevents nil errors
-    end
-  end
-  
-
   def index
     if @current_user
       @places = Place.where(user_id: @current_user.id)
     else
-      @places = []  # ✅ Prevents nil errors
+      @places = []
     end
   end
 
@@ -26,5 +17,26 @@ class PlacesController < ApplicationController
     else
       @entries = Entry.where(place_id: @place.id)
     end
+  end
+
+  def new
+    @place = Place.new
+  end
+
+  def create
+    @place = Place.new(place_params)
+    @place.user_id = @current_user.id  # Associate with the logged-in user
+
+    if @place.save
+      redirect_to @place, notice: 'Place was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  private
+
+  def place_params
+    params.require(:place).permit(:name, :address, :description)  # Adjust attributes to match your model
   end
 end
