@@ -22,10 +22,6 @@ test:
 
 production:
   adapter: postgresql
-  encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   database: hw4_production
   username: hw4
   password: <%= ENV["HW4_DATABASE_PASSWORD"] %>
-  host: <%= ENV["DATABASE_URL"] %>
-  port: 5432
